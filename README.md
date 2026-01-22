@@ -7,7 +7,3 @@ BirdCam is a smart bird monitoring application designed to capture all footage f
 - **Motion Detection**: Detects motion and records archived video clips at all times.
 - **Instant Notifications**: Receive mobile alerts when birds visit.
 - **Live Streaming**: View your bird cam feed from anywhere via a secure web interface.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
