@@ -22,12 +22,10 @@ export async function GET(req: Request) {
         return Response.json([]);
     }
 
-    // 1. Get all video clips
     const files = fs.readdirSync(dir)
         .filter(f => f.endsWith(".mp4"))
         .sort();
 
-    // 2. Parse motion history
     let motionTimestamps: number[] = [];
     if (fs.existsSync(MOTION_FILE)) {
         try {
@@ -43,40 +41,29 @@ export async function GET(req: Request) {
                 })
                 .filter((t): t is number => t !== null && !isNaN(t));
 
-            // Filter for the requested date (optimization) to reduce checks
-            // We assume local time in logs matches the date folder structure
-            // Or easier: Just keep them all as timestamps
         } catch (e) {
             console.error("Failed to read motion file:", e);
         }
     }
 
-    // 3. Map clips to determine if they contain motion
     const clipsWithMotion: Clip[] = files.map((file, index) => {
-        // Parse start time from filename "HH-MM-SS.mp4" + date
-        // Note: Filename has no date, so we combine with `date` param
-        const timePart = file.replace(".mp4", "").replace(/-/g, ":"); // HH:MM:SS
+        const timePart = file.replace(".mp4", "").replace(/-/g, ":");
         const startStr = `${date} ${timePart}`;
         const startTime = new Date(startStr).getTime();
 
-        // Determine end time
-        // If there is a next clip, end time is next clip start
-        // If last clip, assume a default duration (e.g., 10 minutes)
         let endTime;
         if (index < files.length - 1) {
             const nextTimePart = files[index + 1].replace(".mp4", "").replace(/-/g, ":");
             const nextStartStr = `${date} ${nextTimePart}`;
             endTime = new Date(nextStartStr).getTime();
         } else {
-            endTime = startTime + 10 * 60 * 1000; // 10 minutes fallback
+            endTime = startTime + 10 * 60 * 1000;
         }
 
-        // Check format validity
         if (isNaN(startTime)) {
             return { name: file, hasMotion: false };
         }
 
-        // Check if any motion event falls within [startTime, endTime)
         const hasMotion = motionTimestamps.some(t => t >= startTime && t < endTime);
 
         return {
