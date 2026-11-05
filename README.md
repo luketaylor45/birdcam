@@ -1,6 +1,6 @@
 # BirdCam 🐦
 
-BirdCam is a smart bird monitoring application designed to capture all footage from a camera and save it to a local server and display on a modern web interface, allowing the user to view the footage and view the live feed from the birdbox. This project was build with a Raspberry Pi, USB Webcam, Linux local server and a birdbox.
+BirdCam is a smart bird monitoring application designed to capture camera footage, save it to a local server, and display recorded clips and a live birdbox feed through a modern web interface. This project was built with a Raspberry Pi, USB webcam, local Linux server, and a birdbox.
 
 ## Features
 
